@@ -13,9 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-shiori/obelisk"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/wuhan005/obelisk"
 )
 
 type archiveRequest struct {

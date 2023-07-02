@@ -7,7 +7,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/go-shiori/obelisk"
+	"github.com/wuhan005/obelisk"
 )
 
 func main() {

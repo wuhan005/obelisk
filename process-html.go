@@ -70,7 +70,6 @@ func (arc *Archiver) processHTML(ctx context.Context, input io.Reader, baseURL *
 		// - Convert relative URL into absolute URL
 		// - Remove subresources integrity attribute from links
 		arc.setContentSecurityPolicy(doc)
-		arc.setSourceURL(ctx, doc, baseURL)
 		arc.addMeta(doc)
 		arc.applyConfiguration(doc)
 		arc.convertNoScriptToDiv(doc, true)
@@ -202,24 +201,6 @@ func (arc *Archiver) setContentSecurityPolicy(doc *html.Node) {
 		meta := dom.CreateElement("meta")
 		dom.SetAttribute(meta, "http-equiv", "Content-Security-Policy")
 		dom.SetAttribute(meta, "content", policies[i])
-		dom.PrependChild(heads[0], meta)
-	}
-}
-
-// set original URL into head meta
-func (arc *Archiver) setSourceURL(ctx context.Context, doc *html.Node, baseURL *nurl.URL) {
-	// Put the URL to head
-	heads := dom.GetElementsByTagName(doc, "head")
-	meta := dom.CreateElement("meta")
-	dom.SetAttribute(meta, "property", "source:url")
-	dom.SetAttribute(meta, "content", baseURL.String())
-	dom.PrependChild(heads[0], meta)
-
-	// Prepend the origin URL into the head; if it is a redirected URL, it should different from `source:url`.
-	if origin := originFromContext(ctx); origin != nil {
-		meta = dom.CreateElement("meta")
-		dom.SetAttribute(meta, "property", "origin:url")
-		dom.SetAttribute(meta, "content", origin.String())
 		dom.PrependChild(heads[0], meta)
 	}
 }
